@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	submitButton.addEventListener('click', function() {
 		//11. we now complete the API request links by adding the necessary values
 		// from the user input into the appropriate spots in the query string (varies for each API)
-		weatherAPI = "http://api.openweathermap.org/data/2.5/weather?q=" + destinationCity + "&appid=99a1e4d3282a262069a4a5844e73f97c&callback=onFetchCompleteWeather";
+		weatherAPI = "//api.openweathermap.org/data/2.5/weather?q=" + destinationCity + "&appid=99a1e4d3282a262069a4a5844e73f97c&callback=onFetchCompleteWeather";
 		mapsAPI = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDBwNdqeYTYxY0kDNgv2ty9lykzQSgOwJ8&q=" + destinationCity;
 		//12. now we initiate the XML request (to get API data)
 		//we'll first get the weather data
