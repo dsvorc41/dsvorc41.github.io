@@ -33,37 +33,6 @@ var onFetchCompleteWikiImage = function(data) {
 		var articleImage = document.querySelector("#city-image");
 		articleImage.src = WikiImage;
 	}
-
-var onFetchCompleteWeather = function(data) {
-		var weatherObject = data;
-		//13b. selecting the appropriate elements from index.html by their id name
-		var city = document.querySelector("#wCity");
-		var country = document.querySelector("#wCountry");
-		var weatherDescription = document.querySelector("#wMainDescription");
-		var tempCelsius = document.querySelector("#wTempCelsius");
-		var tempFahrenheit = document.querySelector("#wTempFahrenheit");
-		var pressure = document.querySelector("#wPressure");
-		var humidity = document.querySelector("#wHumidity");
-		var windSpeed = document.querySelector("#wWindSpeed");
-		//13c. assigning values from the weatherobject(parsed string we recieved from API request) to
-		//appropriate elements in the index.html
-		city.innerHTML = weatherObject["name"];
-		country.innerHTML = weatherObject["sys"]["country"];
-		weatherDescription.innerHTML = (weatherObject["weather"][0]["description"]).replace(/\w\S*/g, function(txt) {
-			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-		});
-		tempCelsius.innerHTML = "test1";
-		tempFahrenheit.innerHTML = "test1";
-		pressure.innerHTML = "test1";
-		humidity.innerHTML = "test1";
-		windSpeed.innerHTML = "test1";
-	/*	tempCelsius.innerHTML = (weatherObject["main"]["temp"] - 273.15).toFixed(2) + String.fromCharCode(176) + " C";
-		tempFahrenheit.innerHTML = ((weatherObject["main"]["temp"]) * 9 / 5 - 459.67).toFixed(2) + String.fromCharCode(176) + " F";
-		pressure.innerHTML = weatherObject["main"]["pressure"] + " mbar";
-		humidity.innerHTML = weatherObject["main"]["humidity"] + " %";
-		windSpeed.innerHTML = weatherObject["wind"]["speed"] + " km/h";*/
-	}
-
 	//3. we now add the event listener to trigger the rest of our code once the DOM content has loaded (the document is ready)
 document.addEventListener('DOMContentLoaded', function() {
 	//4. we declare all variables first, so any function can later access them    
@@ -86,11 +55,12 @@ document.addEventListener('DOMContentLoaded', function() {
 	submitButton.addEventListener('click', function() {
 		//11. we now complete the API request links by adding the necessary values
 		// from the user input into the appropriate spots in the query string (varies for each API)
-		weatherAPI = "//api.openweathermap.org/data/2.5/weather?q=" + destinationCity + "&appid=99a1e4d3282a262069a4a5844e73f97c&callback=onFetchCompleteWeather";
+		weatherAPI = "https://api.wunderground.com/api/bb3eb942efe7ac14/conditions/q/CA/San_Francisco.json";
+		//"http://api.openweathermap.org/data/2.5/weather?q=" + destinationCity + "&appid=99a1e4d3282a262069a4a5844e73f97c";
 		mapsAPI = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDBwNdqeYTYxY0kDNgv2ty9lykzQSgOwJ8&q=" + destinationCity;
 		//12. now we initiate the XML request (to get API data)
 		//we'll first get the weather data
-		/*var getApiData = function(url) {
+		var getApiData = function(url) {
 				var request = new XMLHttpRequest();
 				request.open('GET', url, true);
 				request.onload = function(e) {
@@ -108,8 +78,29 @@ document.addEventListener('DOMContentLoaded', function() {
 			//and add it to appropriate place index the index.html
 		var formatWeatherData = function(jsonString) {
 				//13a. here we parse the jsonstring recieved from API and asign it to a variable (object);
-
-			}*/
+				var weatherObject = JSON.parse(jsonString);
+				//13b. selecting the appropriate elements from index.html by their id name
+				var city = document.querySelector("#wCity");
+				var country = document.querySelector("#wCountry");
+				var weatherDescription = document.querySelector("#wMainDescription");
+				var tempCelsius = document.querySelector("#wTempCelsius");
+				var tempFahrenheit = document.querySelector("#wTempFahrenheit");
+				var pressure = document.querySelector("#wPressure");
+				var humidity = document.querySelector("#wHumidity");
+				var windSpeed = document.querySelector("#wWindSpeed");
+				//13c. assigning values from the weatherobject(parsed string we recieved from API request) to
+				//appropriate elements in the index.html
+				city.innerHTML = weatherObject["current_observation"]["temperature_string"];
+				country.innerHTML = weatherObject["sys"]["country"];
+				weatherDescription.innerHTML = (weatherObject["weather"][0]["description"]).replace(/\w\S*/g, function(txt) {
+					return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+				});
+				tempCelsius.innerHTML = (weatherObject["main"]["temp"] - 273.15).toFixed(2) + String.fromCharCode(176) + " C";
+				tempFahrenheit.innerHTML = ((weatherObject["main"]["temp"]) * 9 / 5 - 459.67).toFixed(2) + String.fromCharCode(176) + " F";
+				pressure.innerHTML = weatherObject["main"]["pressure"] + " mbar";
+				humidity.innerHTML = weatherObject["main"]["humidity"] + " %";
+				windSpeed.innerHTML = weatherObject["wind"]["speed"] + " km/h";
+			}
 			//14. add the map data. this is more straightforward than steps 10 and 11
 			// we already have the iframe element defined in the index.html
 			// we just have to assign the proper url to the src atribute of the iframe element
@@ -159,15 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		//16. Here we are done with Wikipedia, and are now making an XML request for weather data to Open Weather Map
 		//the function was defined above, but we now invoke it with the fully formed weatherAPI string (API request URL)
-			var getWeather = function() {
-			var tempscript = null;
-			tempscript = document.createElement("script");
-			tempscript.type = "text/javascript";
-			tempscript.id = "tempscript";
-			
-			tempscript.src = weatherAPI;
-			document.body.append(tempscript);
-		}();
+		getApiData(weatherAPI);
 
 		//17. empty all the variables so that new input can be properly recorded
 		//i.e. start again with a clean slate
