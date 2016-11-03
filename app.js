@@ -52,11 +52,16 @@ var onFetchCompleteWeather = function(data) {
 		weatherDescription.innerHTML = (weatherObject["weather"][0]["description"]).replace(/\w\S*/g, function(txt) {
 			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 		});
-		tempCelsius.innerHTML = (weatherObject["main"]["temp"] - 273.15).toFixed(2) + String.fromCharCode(176) + " C";
+		tempCelsius.innerHTML = "test1";
+		tempFahrenheit.innerHTML = "test1";
+		pressure.innerHTML = "test1";
+		humidity.innerHTML = "test1";
+		windSpeed.innerHTML = "test1";
+	/*	tempCelsius.innerHTML = (weatherObject["main"]["temp"] - 273.15).toFixed(2) + String.fromCharCode(176) + " C";
 		tempFahrenheit.innerHTML = ((weatherObject["main"]["temp"]) * 9 / 5 - 459.67).toFixed(2) + String.fromCharCode(176) + " F";
 		pressure.innerHTML = weatherObject["main"]["pressure"] + " mbar";
 		humidity.innerHTML = weatherObject["main"]["humidity"] + " %";
-		windSpeed.innerHTML = weatherObject["wind"]["speed"] + " km/h";
+		windSpeed.innerHTML = weatherObject["wind"]["speed"] + " km/h";*/
 	}
 
 	//3. we now add the event listener to trigger the rest of our code once the DOM content has loaded (the document is ready)
