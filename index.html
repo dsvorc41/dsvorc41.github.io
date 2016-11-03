@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Interesting Geography</title>
+
+</head>
+
+<body>
+<!-- Page header with the title, input box and submit button -->
+    <div class="container">
+        <div class="page-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>Interesting Geography</h1>
+                        <div class="container" >
+                            <div class="row">
+                                <div class="col-lg-4">
+
+                                <!-- table that contains input field and submit button -->
+
+                                    <table class="table" id = "submit-info">
+                                        <tbody id="weather">
+                                            <td scope="row">
+                                                <span>Enter City Name: </span>
+                                            </td>
+                                            <td scope="row">
+                                                <input id="destinationCity" type="text" class="input-box" placeholder="e.g London" maxlength="140 ">
+                                            </td>
+                                        </tbody>
+                                    </table>
+                                    <button id="submit" class="btn btn-block ">Submit</button>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- this div element contains the map and the weather data in a table
+    everything within it is intially hidden until the user enters
+    the necessary information and clicks "submit"-->
+
+    <div class="container hidden weather-and-map">
+
+        <div class="row">
+
+            <div class="col-lg-6">
+
+                <table class="table table-hover">
+                    <tbody id="weather"> <div class="text-center"><h4>Current Weather</h4></div>
+                        <tr>
+                            <td scope="row">City</td>
+                            <td scope="row" id="wCity"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Country Code</td>
+                            <td scope="row" id="wCountry"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Current weather</td>
+                            <td scope="row" id="wMainDescription"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Temperature (Celsius)</td>
+                            <td scope="row" id="wTempCelsius"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Temperature (Fahrenheit)</td>
+                            <td scope="row" id="wTempFahrenheit"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Atmospheric Pressure</td>
+                            <td scope="row" id="wPressure"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Humidity</td>
+                            <td scope="row" id="wHumidity"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Wind Speed</td>
+                            <td scope="row" id="wWindSpeed"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="col-lg-6 pull-right ">
+
+                <div class="map-responsive ">
+                    <iframe id="embededMap" width=auto height=auto frameborder="0" style="border:0" src= will_Be_Assigned_Upon_Submit allowfullscreen>
+                    </iframe>
+                </div>
+
+            </div>
+        </div>
+    </div>
+<!-- this div element contains the wikipedia article and image in a table
+    everything within it is intially hidden until the user enters
+    the necessary information and clicks "submit"-->
+
+    <div class="container wikipedia-article hidden">
+        <div class="row">
+            <div class="col-lg-6">
+                <table class="table">
+                    <tbody><div class="text-center"><h4>Did you know?</h4></div>
+                        <tr>
+                            <td scope="row" id="article"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row">
+                            	<h6 class="text-right">Source: Wikipedia</h6>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-lg-6">
+
+                <div class="img-responsive">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Golden_Gate_Bridge%2C_SF_%28cropped%29.jpg/1500px-Golden_Gate_Bridge%2C_SF_%28cropped%29.jpg" alt="some_text" id="city-image" class="img-responsive">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<!-- footer -->
+
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">Interesting Geography &copy; 2016 </p>
+      </div>
+    </footer>
+
+<!-- placed at the end for faster loading -->
+
+    <script src="app.js"></script>
+    <link href="bootstrap.css" rel="stylesheet" type="text/css" />
+
+
+</body>
+
+
+</html>
