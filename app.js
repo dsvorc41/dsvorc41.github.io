@@ -1,6 +1,8 @@
 //1. onFetchCOmpleteWikiArticle function has to be defined in the global scope
 //data parameter is the actual object retrieved by the API request
 var onFetchCompleteWikiArticle = function(data) {
+        var city = document.querySelector("#wCity")
+
         for (var k in data["query"]["pages"]) {
             //1a. if we get a successful response from the server we can process data
             if (data["query"]["pages"][k]["extract"]) {
@@ -12,7 +14,11 @@ var onFetchCompleteWikiArticle = function(data) {
                 var showWeatherAndMap = document.querySelector(".weather-and-map");
                 showWeatherAndMap.classList.remove("hidden");
 
-                //1aa. if there is no valid response, we alert the user to try different input
+                //1d. if Wikipedia Article was found, but no weather data let the user know it was probably a typo in the country input box
+                if (city.innerHTML === "") {
+                    alert("No weather data found. Try again with different spelling for the country. Alternatively, feel free to read some interesting facts below!");
+                }
+
             } else {
                 alert("No data found! Try again with different spelling and punctuation. Try to capitalize first letter, add a comma and space (e.g. Bristol, United Kingdom)");
             }
@@ -94,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
         //11. we now complete the API request links by adding the necessary values
         // from the user input into the appropriate spots in the query string (varies for each API)
         weatherAPI = "https://api.wunderground.com/api/bb3eb942efe7ac14/conditions/q/" + destinationStateOrCountry + "/" + destinationCity + ".json";
-       
+
         //12. now we initiate the XML request (to get API data)
         //we'll first get the weather data
         var getApiData = function(url) {
@@ -116,37 +122,37 @@ document.addEventListener('DOMContentLoaded', function() {
             //and add it to appropriate place index the index.html
         var formatWeatherData = function(jsonString) {
 
-                //13a. here we parse the jsonstring recieved from API and asign it to a variable (object);
-                var weatherObject = JSON.parse(jsonString);
-                //13b. selecting the appropriate elements from index.html by their id name
-                var city = document.querySelector("#wCity");
-                var localTime = document.querySelector("#wlocalTime");
-                var temp = document.querySelector("#wTemp");
+            //13a. here we parse the jsonstring recieved from API and asign it to a variable (object);
+            var weatherObject = JSON.parse(jsonString);
+            //13b. selecting the appropriate elements from index.html by their id name
+            var city = document.querySelector("#wCity");
+            var localTime = document.querySelector("#wlocalTime");
+            var temp = document.querySelector("#wTemp");
 
-                var pressure = document.querySelector("#wPressure");
-                var humidity = document.querySelector("#wHumidity");
-                var wind = document.querySelector("#wWind");
-                var icon = document.querySelector("#wIcon");
-                var lastUpdated = document.querySelector("#wLastUpdated");
+            var pressure = document.querySelector("#wPressure");
+            var humidity = document.querySelector("#wHumidity");
+            var wind = document.querySelector("#wWind");
+            var icon = document.querySelector("#wIcon");
+            var lastUpdated = document.querySelector("#wLastUpdated");
 
-                //13c. assigning values from the weatherobject(parsed string we recieved from API request) to
-                //appropriate elements in the index.html
-                city.innerHTML = weatherObject["current_observation"]["display_location"]["full"];
-                localTime.innerHTML = weatherObject["current_observation"]["local_time_rfc822"];
-                temp.innerHTML = weatherObject["current_observation"]["temperature_string"];
-                pressure.innerHTML = weatherObject["current_observation"]["pressure_mb"] + " mbar";
-                humidity.innerHTML = weatherObject["current_observation"]["relative_humidity"];
-                ""
-                wind.innerHTML = weatherObject["current_observation"]["wind_string"];
-                icon.src = weatherObject["current_observation"]["icon_url"];
-                lastUpdated.innerHTML = weatherObject["current_observation"]["observation_time"];
+            //13c. assigning values from the weatherobject(parsed string we recieved from API request) to
+            //appropriate elements in the index.html
+            city.innerHTML = weatherObject["current_observation"]["display_location"]["full"];
+            localTime.innerHTML = weatherObject["current_observation"]["local_time_rfc822"];
+            temp.innerHTML = weatherObject["current_observation"]["temperature_string"];
+            pressure.innerHTML = weatherObject["current_observation"]["pressure_mb"] + " mbar";
+            humidity.innerHTML = weatherObject["current_observation"]["relative_humidity"];
+            ""
+            wind.innerHTML = weatherObject["current_observation"]["wind_string"];
+            icon.src = weatherObject["current_observation"]["icon_url"];
+            lastUpdated.innerHTML = weatherObject["current_observation"]["observation_time"];
 
-                var latitude = weatherObject["current_observation"]["observation_location"]["latitude"];
-                var longitude = weatherObject["current_observation"]["observation_location"]["longitude"];
+            var latitude = weatherObject["current_observation"]["observation_location"]["latitude"];
+            var longitude = weatherObject["current_observation"]["observation_location"]["longitude"];
 
-                mapsAPI = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDBwNdqeYTYxY0kDNgv2ty9lykzQSgOwJ8&q=" + latitude + "," + longitude + "&zoom=12";
-                embededMap.src = mapsAPI;
-            }
+            mapsAPI = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDBwNdqeYTYxY0kDNgv2ty9lykzQSgOwJ8&q=" + latitude + "," + longitude + "&zoom=12";
+            embededMap.src = mapsAPI;
+        }
 
         //15. Adding the wikipedia introductory paragraph by creating a dynamic script and using JSONP callback function to exctract the data
         //JSONP callback function (onFetchComplete) is defined in global scope, beyond even document-ready function since
