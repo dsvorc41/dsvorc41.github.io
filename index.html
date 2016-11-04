@@ -24,12 +24,22 @@
 
                                     <table class="table" id = "submit-info">
                                         <tbody id="weather">
-                                            <td scope="row">
-                                                <span>Enter City Name: </span>
-                                            </td>
-                                            <td scope="row">
-                                                <input id="destinationCity" type="text" class="input-box" placeholder="e.g London" maxlength="140 ">
-                                            </td>
+                                            <tr>
+                                                <td scope="row">
+                                                    <span>Enter City Name: </span>
+                                                </td>
+                                                <td scope="row">
+                                                    <input id="destinationCity" type="text" class="input-box" placeholder="e.g London" maxlength="140 ">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td scope="row">
+                                                    <span>Enter State or Country Name (if outside US): </span>
+                                                </td>
+                                                <td scope="row">
+                                                    <input type="text" id = "stateOrCountry" class="input-box" placeholder="e.g London" maxlength="140 ">
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                     <button id="submit" class="btn btn-block ">Submit</button>
@@ -52,29 +62,23 @@
 
         <div class="row">
 
-            <div class="col-lg-6">
+            <div class="col-lg-5">
 
                 <table class="table table-hover">
-                    <tbody id="weather"> <div class="text-center"><h4>Current Weather</h4></div>
+                    <tbody id="weather"> <div class="text-center"><h4>Current Weather<span>
+                        <img class = "center-block" id = "wIcon" alt="some_text" class="img-responsive">
+                    </span></h4></div>
                         <tr>
                             <td scope="row">City</td>
                             <td scope="row" id="wCity"></td>
                         </tr>
                         <tr>
-                            <td scope="row">Country Code</td>
-                            <td scope="row" id="wCountry"></td>
+                            <td scope="row">Local Time</td>
+                            <td scope="row" id="wlocalTime"></td>
                         </tr>
                         <tr>
-                            <td scope="row">Current weather</td>
-                            <td scope="row" id="wMainDescription"></td>
-                        </tr>
-                        <tr>
-                            <td scope="row">Temperature (Celsius)</td>
-                            <td scope="row" id="wTempCelsius"></td>
-                        </tr>
-                        <tr>
-                            <td scope="row">Temperature (Fahrenheit)</td>
-                            <td scope="row" id="wTempFahrenheit"></td>
+                            <td scope="row">Temperature</td>
+                            <td scope="row" id="wTemp"></td>
                         </tr>
                         <tr>
                             <td scope="row">Atmospheric Pressure</td>
@@ -85,20 +89,32 @@
                             <td scope="row" id="wHumidity"></td>
                         </tr>
                         <tr>
-                            <td scope="row">Wind Speed</td>
-                            <td scope="row" id="wWindSpeed"></td>
+                            <td scope="row">Wind</td>
+                            <td scope="row" id="wWind"></td>
+                        </tr>
+                        <tr>
+                            <td scope="row" id="wLastUpdated" colspan="2" class = "text-center"></td>
                         </tr>
                     </tbody>
                 </table>
 
             </div>
-            <div class="col-lg-6 pull-right ">
-
-                <div class="map-responsive ">
-                    <iframe id="embededMap" width=auto height=auto frameborder="0" style="border:0" src= will_Be_Assigned_Upon_Submit allowfullscreen>
-                    </iframe>
-                </div>
-
+            <div class="col-lg-6">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr>
+                            <td scope="row" class="text-center">Weather observation location</td>
+                        </tr>
+                        <tr>
+                            <td scope="row">
+                                <div class="map-responsive ">
+                                    <iframe id="embededMap" width=auto height=auto frameborder="0" style="border:0" src= will_Be_Assigned_Upon_Submit allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -116,7 +132,7 @@
                         </tr>
                         <tr>
                             <td scope="row">
-                            	<h6 class="text-right">Source: Wikipedia</h6>
+                            	<h6 class="text-right">Source: Wikipedia; Weather Underground</h6>
                             </td>
                         </tr>
                     </tbody>
@@ -126,7 +142,7 @@
             <div class="col-lg-6">
 
                 <div class="img-responsive">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Golden_Gate_Bridge%2C_SF_%28cropped%29.jpg/1500px-Golden_Gate_Bridge%2C_SF_%28cropped%29.jpg" alt="some_text" id="city-image" class="img-responsive">
+                    <img alt="some_text" id="city-image" class="img-responsive">
                 </div>
 
             </div>
@@ -140,8 +156,12 @@
         <p class="text-muted">Interesting Geography &copy; 2016 </p>
       </div>
     </footer>
+    <div >
+        <p id ="latitude"></p>
+        <p id = "longitude"></p>
+    </div>
 
-<!-- placed at the end for faster loading -->
+<!-- placed at the end for faster loading class = "hidden"-->
 
     <script src="app.js"></script>
     <link href="bootstrap.css" rel="stylesheet" type="text/css" />
