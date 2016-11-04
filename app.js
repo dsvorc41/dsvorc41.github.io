@@ -37,16 +37,23 @@ var onFetchCompleteWikiImage = function(data) {
 document.addEventListener('DOMContentLoaded', function() {
 	//4. we declare all variables first, so any function can later access them    
 	var destinationCity = "";
-	var mapsAPI = "";
+	//var mapsAPI = "";
 	var weatherAPI = "";
 	var WikiArticle = "";
 	var WikiImage = "";
+	var destinationStateOrCountry = "";
+
 	//5. we now select appropriate elements by ID from the index.html
 	//6. and add the even listner for input in order to populate 
 	//7. the variables we declared in step 2 above
 	var destinationCityInput = document.querySelector("#destinationCity");
 	destinationCityInput.addEventListener('input', function() {
 		destinationCity += this.value[this.value.length - 1];
+	});
+
+	var destinationStateOrCountryInput = document.querySelector("#stateOrCountry");
+	destinationStateOrCountryInput.addEventListener('input', function() {
+		destinationStateOrCountry += this.value[this.value.length - 1];
 	});
 	//8. we now select the submit button
 	//9. add the event listener for click on the submit button
@@ -55,9 +62,22 @@ document.addEventListener('DOMContentLoaded', function() {
 	submitButton.addEventListener('click', function() {
 		//11. we now complete the API request links by adding the necessary values
 		// from the user input into the appropriate spots in the query string (varies for each API)
-		weatherAPI = "https://api.wunderground.com/api/bb3eb942efe7ac14/conditions/q/CA/San_Francisco.json";
+		destinationStateOrCountry = destinationStateOrCountry.replace(/[ ]/g, "_");
+		destinationCity = destinationCity.replace(/[ ]/g, "%20");
+		weatherAPI = "https://api.wunderground.com/api/bb3eb942efe7ac14/conditions/q/"+destinationStateOrCountry+"/"+ destinationCity +".json";
+		//"https://api.wunderground.com/api/bb3eb942efe7ac14/conditions/q/" + destinationStateOrCountry + "/" + destinationCity + ".json";
+//alert(destinationStateOrCountry);
+//alert(destinationCity);
+//alert (JSON.stringify(destinationCity));
+					/*
+					my key:bb3eb942efe7ac14
+					CA/San_Francisco	US state/city
+			60290	US zipcode
+			Australia/Sydney	country/city*/
 		//"http://api.openweathermap.org/data/2.5/weather?q=" + destinationCity + "&appid=99a1e4d3282a262069a4a5844e73f97c";
-		mapsAPI = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDBwNdqeYTYxY0kDNgv2ty9lykzQSgOwJ8&q=" + destinationCity;
+
+		//mapsAPI = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDBwNdqeYTYxY0kDNgv2ty9lykzQSgOwJ8&q=37.778488,-122.408005&zoom=11";
+		//"https://www.google.com/maps/embed/v1/place?key=AIzaSyDBwNdqeYTYxY0kDNgv2ty9lykzQSgOwJ8&q=" + destinationCity;
 		//12. now we initiate the XML request (to get API data)
 		//we'll first get the weather data
 		var getApiData = function(url) {
@@ -68,43 +88,63 @@ document.addEventListener('DOMContentLoaded', function() {
 						if (request.status === 200) {
 							formatWeatherData(request.responseText);
 						} else {
-							console.error(request.statusText);
+							alert(request.statusText);
 						}
 					}
+
 				};
 				request.send(null);
 			}
 			//13. we recieved the JSONstring from the weather API request, and now we need to format the data
 			//and add it to appropriate place index the index.html
 		var formatWeatherData = function(jsonString) {
+			
 				//13a. here we parse the jsonstring recieved from API and asign it to a variable (object);
 				var weatherObject = JSON.parse(jsonString);
 				//13b. selecting the appropriate elements from index.html by their id name
 				var city = document.querySelector("#wCity");
-				var country = document.querySelector("#wCountry");
-				var weatherDescription = document.querySelector("#wMainDescription");
-				var tempCelsius = document.querySelector("#wTempCelsius");
-				var tempFahrenheit = document.querySelector("#wTempFahrenheit");
+				var localTime = document.querySelector("#wlocalTime");
+				var temp = document.querySelector("#wTemp");
+	
 				var pressure = document.querySelector("#wPressure");
 				var humidity = document.querySelector("#wHumidity");
-				var windSpeed = document.querySelector("#wWindSpeed");
+				var wind = document.querySelector("#wWind");
+				var icon = document.querySelector("#wIcon");
+				var lastUpdated = document.querySelector("#wLastUpdated");
+
+				if (typeof weatherObject["current_observation"]["display_location"]["full"] === "undefined"){
+					//city.innerHTML = 
+				}
+				//alert ("No weather data found! Try again. For example, if you are searching for United Kingdom, or Great Britain try typing GB in the country field");
+				
+				//latitude = document.querySelector("#latitude")
+				//longitude = document.querySelector("#longitude")
 				//13c. assigning values from the weatherobject(parsed string we recieved from API request) to
 				//appropriate elements in the index.html
-				city.innerHTML = weatherObject["current_observation"]["temperature_string"];
-				country.innerHTML = weatherObject["sys"]["country"];
-				weatherDescription.innerHTML = (weatherObject["weather"][0]["description"]).replace(/\w\S*/g, function(txt) {
-					return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-				});
-				tempCelsius.innerHTML = (weatherObject["main"]["temp"] - 273.15).toFixed(2) + String.fromCharCode(176) + " C";
-				tempFahrenheit.innerHTML = ((weatherObject["main"]["temp"]) * 9 / 5 - 459.67).toFixed(2) + String.fromCharCode(176) + " F";
-				pressure.innerHTML = weatherObject["main"]["pressure"] + " mbar";
-				humidity.innerHTML = weatherObject["main"]["humidity"] + " %";
-				windSpeed.innerHTML = weatherObject["wind"]["speed"] + " km/h";
+				city.innerHTML = weatherObject["current_observation"]["display_location"]["full"];
+				localTime.innerHTML = weatherObject["current_observation"]["local_time_rfc822"];
+				temp.innerHTML = weatherObject["current_observation"]["temperature_string"];
+				pressure.innerHTML = weatherObject["current_observation"]["pressure_mb"] + " mbar";
+				humidity.innerHTML = weatherObject["current_observation"]["relative_humidity"];""
+				wind.innerHTML = weatherObject["current_observation"]["wind_string"];
+				icon.src = weatherObject["current_observation"]["icon_url"];
+				lastUpdated.innerHTML = weatherObject["current_observation"]["observation_time"];
+
+				
+				var latitude= weatherObject["current_observation"]["observation_location"]["latitude"];
+				var longitude = weatherObject["current_observation"]["observation_location"]["longitude"];
+				
+				mapsAPI = "https://www.google.com/maps/embed/v1/place?key=AIzaSyDBwNdqeYTYxY0kDNgv2ty9lykzQSgOwJ8&q=" + latitude + "," + longitude +"&zoom=12";
+				embededMap.src = mapsAPI;
 			}
 			//14. add the map data. this is more straightforward than steps 10 and 11
 			// we already have the iframe element defined in the index.html
 			// we just have to assign the proper url to the src atribute of the iframe element
-		embededMap.src = mapsAPI;
+			//
+			//"https://www.google.com/maps/embed/v1/place?key=AIzaSyDBwNdqeYTYxY0kDNgv2ty9lykzQSgOwJ8&q=37.778488,-122.408005&zoom=11";
+			//
+			
+		
 		//15. Adding the wikipedia introductory paragraph by creating a dynamic script and using JSONP callback function to exctract the data
 		//JSONP callback function (onFetchComplete) is defined in global scope, beyond even document-ready function since
 		//the browser looks in the global scope for the callback function
@@ -168,10 +208,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		//20. we add event handler to listen for click on "search again" button
 		//after that happens, the button text goes back to "submit" and everything reloads
-		//so the user can start the fresh search again!
+		//so the user can start the fresh search again!		
+
 		submitButton.addEventListener('click', function() {
 			submitButton.innerHTML = "Submit";
 			location.reload();
 		});
+
 	});
+
 });
