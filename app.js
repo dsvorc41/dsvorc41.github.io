@@ -14,11 +14,6 @@ var onFetchCompleteWikiArticle = function(data) {
                 var showWeatherAndMap = document.querySelector(".weather-and-map");
                 showWeatherAndMap.classList.remove("hidden");
 
-                //1d. if Wikipedia Article was found, but no weather data let the user know it was probably a typo in the country input box
-                if (city.innerHTML === "") {
-                    alert("No weather data found. Try again with different spelling for the country. Alternatively, feel free to read some interesting facts below!");
-                }
-
             } else {
                 alert("No data found! Try again with different spelling and punctuation. Try to capitalize first letter, add a comma and space (e.g. Bristol, United Kingdom)");
             }
@@ -200,6 +195,17 @@ document.addEventListener('DOMContentLoaded', function() {
         //16. Here we are done with Wikipedia, and are now making an XML request for weather data to Open Weather Map
         //the function was defined above, but we now invoke it with the fully formed weatherAPI string (API request URL)
         getApiData(weatherAPI);
+            
+        //17. setting timeout - wait for eveyrthing to load and then check if we found the weather data. 
+        //this only works if wikipedia article was successufly retrieved. Sometimes we get wikipedia but not the weather due to
+        //API url formatting differences
+
+        setTimeout(function() {
+            var city = document.querySelector("#wCity")
+            if (city.innerHTML === "") {
+                alert("No weather data found. Try again with different spelling for the country. Alternatively, feel free to read some interesting facts below!");
+            }
+        }, 1000);
 
         //17. empty all the variables so that new input can be properly recorded
         //i.e. start again with a clean slate
