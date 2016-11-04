@@ -14,7 +14,7 @@ var onFetchCompleteWikiArticle = function(data) {
 
 			//1aa. if there is no valid response, we alert the user to try different input
 			} else {
-				alert("No data found! Try again with different spelling. If you are searching for a city in United States, try typing a city followed by a coma, space, and state name - e.g. Portland, Oregon");
+				alert("No data found! Try again with different spelling and punctuation. Try to capitalize first letter, add a comma and space (e.g. Bristol, United Kingdom)");
 			}
 		}
 
