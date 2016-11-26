@@ -1,0 +1,155 @@
+<!-- !DOCTYPE html -->
+<html>
+  <head>
+  <meta charset="utf-8"/>
+  <title>Twittler</title>
+
+  <!-- Latest Bootstrap -->
+  <link rel="stylesheet" href="bootstrap.css"/>
+  <script src="jquery.js"></script>
+
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="jquery.js"></script>
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"/>
+    <script src="data_generator.js"></script>
+    <script src="moment.min.js"></script>
+    
+  </head>
+
+<body>
+
+<div class="container"> 
+<div class = "page-header">
+
+  <div class="container">
+    <div class="row">
+      <div class = "col-xs-12">
+        <h1>Twittler</h1>
+
+        <div class="row new-tweets">
+          <div class="col-xs-4 ">
+            <button id = "load" class = "btn btn-block btn-primary ">Load latest tweets</button>
+        </div>
+
+        </div>
+
+        <div class="tweet-post ">
+            <p></p>
+            <span id="visitor">@visitor    </span><span class="glyphicon glyphicon-edit"></span>
+            <input type="text" class="input-box" placeholder="What's on your mind?" maxlength="140 ">
+            <span><button id="post" class="btn-main">Post</button></span>
+            <p></p>
+        </div>
+      </div>
+    </div>
+
+
+</div>
+
+</div>
+</div>
+    
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-bordered table-hover">
+          <tbody id="feed">
+          </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+    <script>
+
+    var getTweets = function(){
+        var $body = $('#feed');
+        $body.empty();
+        var index = streams.home.length-1;
+        
+        while(index >= 0){
+          var tweet = streams.home[index];
+          var $timeStamp = (tweet.created_at.toLocaleTimeString());
+          var $timeFromNow = moment(tweet.created_at).fromNow();
+          var $tweet = $( '<tr>'+
+                            '<td scope="row">'+
+                              '<div class = "row">' +
+                                '<div class= "col-xs-6">' +
+                                  '<button class="btn-link">' + '@' + tweet.user + '</button>'+
+                                '</div>' +
+                              '</div>' +
+                              '<p class = "custom-p">' + $timeStamp +'</p>'+
+                              '<p class = "custom-p">'+ $timeFromNow + '</p>'+
+                            '</td>'+
+                            '<td class="schedule-offset" colspan="2">'+ tweet.message + '</td>'+
+                          '</tr>');
+          $tweet.appendTo($body);
+          index --;
+          }
+      }
+          
+    var getUserTweets = function(name){
+        var $body = $('#feed');
+        $body.empty();
+        var index = streams.users[name].length - 1;
+        while(index >= 0){
+          var tweet = streams.users[name][index];
+          var $timeStamp = (tweet.created_at.toLocaleTimeString());
+          var $timeFromNow = moment(tweet.created_at).fromNow();
+          var $tweet = $( '<tr>'+
+                            '<td scope="row">'+
+                              '<div class = "row">' +
+                                '<div class= "col-xs-6">' +
+                                  '<button class="btn-link">' + '@' + tweet.user + '</button>'+
+                                '</div>' +
+                              '</div>' +
+                              '<p class = "custom-p">' + $timeStamp +'</p>'+
+                              '<p class = "custom-p">'+ $timeFromNow + '</p>'+
+                            '</td>'+
+                            '<td class="schedule-offset" colspan="2">'+ tweet.message + '</td>'+
+                          '</tr>');
+          $tweet.appendTo($body);
+          index --;
+        }
+    }
+    
+    var postVisitorTweet = function (message){
+      
+      var visitorTweet = {};
+    visitorTweet.user = "visitor";
+    visitorTweet.message = message;
+    visitorTweet.created_at = new Date();
+      
+      if (typeof streams.users["visitor"] === "undefined"){
+        streams.users["visitor"] =[];
+        streams.users["visitor"].push(visitorTweet);
+      } else {
+        streams.users["visitor"].push(visitorTweet);
+      }
+      streams.home.push(visitorTweet);  
+    }   
+
+    $(document).ready(function(){
+      
+        getTweets();
+      
+      $('.new-tweets').on('click', 'button', function(){
+          getTweets();
+        });
+
+        $("#feed").on('click', 'button', function(){
+          getUserTweets($(this).text().slice(1));
+        });  
+        
+        $(".tweet-post").on('click', 'button', function(){
+            postVisitorTweet($('.input-box').val());
+            getTweets();
+        });
+            
+    });
+
+    </script>
+
+  </body>
+  
+</html>
